@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Labeeb Bilal Portfolio</title>
+<meta name="description" content="Labeeb Bilal, full stack developer in Srinagar. Backend-first: upload pipelines, job queues, REST APIs and LLM integrations with Node.js, Python and TypeScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Spline+Sans:wght@300..600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: a live job-pipeline simulation holds the right two-thirds of the
+     viewport; all reading sits in one narrow left column over a scrim. */
+  --void:#f3f5f1;
+  --raise:#ffffff;
+  --line:#c3cfca;
+  --paper:#122522;
+  --muted:#5a6b66;
+  --flow:#0d7d74;
+  --retry:#cf5422;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Spline Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Spline Sans Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gutter:clamp(18px,5vw,76px);
+  --col:min(100%,620px);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--paper);font:400 1.0625rem/1.65 var(--body);overflow-x:hidden}
+img{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--flow);outline-offset:3px;border-radius:2px}
+::selection{background:var(--flow);color:var(--void)}
+
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+.fallback{position:fixed;inset:0;z-index:0;display:none;background:
+  radial-gradient(52vmax 44vmax at 72% 18%,#d3e9df,transparent 64%),
+  radial-gradient(46vmax 38vmax at 92% 66%,#f8e3cb,transparent 62%),
+  radial-gradient(60vmax 50vmax at 40% 96%,#d5e2f3,transparent 66%),#f6f7f3}
+html.no-gl .fallback{display:block}
+html.no-gl #gl{display:none}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(100deg,rgba(243,245,241,.95) 0%,rgba(243,245,241,.86) 34%,rgba(243,245,241,.42) 54%,rgba(243,245,241,0) 72%)}
+@media (max-width:900px){.scrim{background:linear-gradient(rgba(243,245,241,.80),rgba(243,245,241,.88))}}
+
+.labels{position:fixed;inset:0;z-index:2;pointer-events:none;display:none}
+@media (min-width:1000px){.labels{display:block}}
+.lab{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;padding:3px 7px;border-radius:3px;background:rgba(255,255,255,.72);font:500 .72rem/1 var(--mono);letter-spacing:.06em;text-transform:lowercase;color:var(--muted);white-space:nowrap;transform:translate3d(-9999px,-9999px,0);will-change:transform}
+.lab::before{content:"";width:5px;height:5px;background:#fff;border:1px solid var(--muted);transform:rotate(45deg)}
+.lab.flip{flex-direction:row-reverse}
+.lab[data-kind="sink"]{color:var(--flow)}
+.lab[data-kind="dead"]{color:var(--retry)}
+
+.bar{position:fixed;left:0;top:0;height:2px;width:100%;background:var(--flow);transform:scaleX(0);transform-origin:left;z-index:20}
+header,main,footer{position:relative;z-index:3}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:12;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px var(--gutter) 30px;background:linear-gradient(rgba(243,245,241,.96) 42%,rgba(243,245,241,0));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);pointer-events:none}
+.nav>*{pointer-events:auto}
+.brand{font:600 1.05rem/1 var(--display);font-variation-settings:"wdth" 112,"wght" 620;letter-spacing:.02em;text-decoration:none;text-transform:uppercase}
+.nav nav{display:flex;gap:clamp(12px,2.6vw,30px);font:400 .92rem/1 var(--body)}
+.nav nav a{text-decoration:none;color:var(--muted);padding:6px 0;border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+.nav nav a:hover,.nav nav a.here{color:var(--paper);border-color:var(--flow)}
+
+/* hero */
+.hero{padding:clamp(104px,20vh,200px) var(--gutter) clamp(72px,14vh,148px)}
+h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(3.1rem,9.2vw,7.4rem);line-height:.92;letter-spacing:-.012em;text-transform:uppercase}
+h1 .ln{display:block;overflow:hidden;padding-bottom:.04em}
+h1 .ch{display:inline-block;--wd:118;font-variation-settings:"wdth" var(--wd),"wght" 700;will-change:transform}
+.lead{margin:clamp(22px,3.6vh,38px) 0 0;max-width:34ch;font:300 clamp(1.18rem,2.3vw,1.72rem)/1.38 var(--display);font-variation-settings:"wdth" 96,"wght" 330;color:var(--paper)}
+.stats{display:flex;flex-wrap:wrap;gap:26px 46px;margin:clamp(30px,5vh,52px) 0 0;padding:0;list-style:none}
+.stats li{display:grid;gap:2px}
+.num{font:600 clamp(2rem,4.6vw,3.1rem)/1 var(--display);font-variation-settings:"wdth" 108,"wght" 600;font-variant-numeric:tabular-nums;color:var(--flow)}
+.stats span.cap{font:400 .9rem/1.3 var(--body);color:var(--muted);max-width:16ch}
+.legend{margin:clamp(30px,5vh,54px) 0 0;max-width:var(--col);padding-top:18px;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
+.legend .seq{font-family:var(--mono);font-size:.82rem;letter-spacing:.02em;color:var(--paper);display:block;margin-bottom:10px}
+.key{display:inline-flex;align-items:center;gap:7px;margin-right:18px}
+.key i{width:9px;height:9px;border-radius:50%;background:var(--flow)}
+.key.r i{background:var(--retry)}
+
+/* sections */
+.sec{padding:clamp(76px,13vh,150px) var(--gutter)}
+h2{margin:0 0 .5em;font-family:var(--display);font-weight:500;font-size:clamp(2.1rem,5.2vw,3.9rem);line-height:1.02;letter-spacing:-.01em;max-width:18ch;font-variation-settings:"wdth" var(--wd,76),"wght" var(--wt,440);transition:font-variation-settings .1s linear}
+.sub{margin:0 0 clamp(34px,6vh,62px);max-width:52ch;color:var(--muted);font-size:1.06rem}
+
+/* roles */
+.roles{position:relative;max-width:var(--col);padding-left:30px}
+.roles::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:1px;background:var(--line)}
+.roles::after{content:"";position:absolute;left:4px;top:8px;width:1px;height:calc(100% - 16px);background:var(--flow);transform:scaleY(var(--fill,0));transform-origin:top;transition:transform .15s linear}
+.role{position:relative;padding:0 0 clamp(42px,7vh,74px)}
+.role:last-child{padding-bottom:0}
+.role::before{content:"";position:absolute;left:-30px;top:10px;width:9px;height:9px;margin-left:.5px;background:var(--void);border:1.5px solid var(--flow);border-radius:50%}
+.role.past::before{border-color:var(--muted)}
+.co{margin:0;font:600 clamp(1.45rem,3.4vw,2.3rem)/1.1 var(--display);font-variation-settings:"wdth" 102,"wght" 600;letter-spacing:-.005em}
+.rmeta{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0 20px;font:400 .84rem/1.4 var(--mono);color:var(--muted)}
+.rmeta .now{color:var(--flow)}
+.bullets{margin:0;padding:0;list-style:none;display:grid;gap:14px;max-width:58ch}
+.bullets li{position:relative;padding-left:20px}
+.bullets li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1.5px;background:var(--flow)}
+.bullets b{font-weight:600;color:#06110f}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:20px 0 0;padding:0;list-style:none}
+.chips li{padding:3px 11px;border:1px solid var(--line);border-radius:999px;font:400 .78rem/1.5 var(--mono);color:var(--muted);background:rgba(255,255,255,.78)}
+
+/* schematic */
+.schema{margin:26px 0 0;padding:18px 16px 14px;border:1px solid var(--line);border-radius:6px;background:rgba(255,255,255,.76);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 1px 2px rgba(18,37,34,.04),0 18px 36px -24px rgba(18,37,34,.34)}
+.schema figcaption{margin-top:10px;font:400 .8rem/1.5 var(--mono);color:var(--muted)}
+.schema svg{display:block;width:100%;height:auto;overflow:visible}
+.sv-txt{font:500 8px var(--mono);fill:#5a6b66;letter-spacing:.04em}
+.sv-box{fill:rgba(255,255,255,.78);stroke:#a7b7b1;stroke-width:1}
+.sv-ok{fill:none;stroke:#0d7d74;stroke-width:1.4}
+.sv-warn{fill:none;stroke:#cf5422;stroke-width:1.4}
+.fl{animation:fl 3.4s cubic-bezier(.5,0,.5,1) infinite;animation-delay:calc(var(--i) * .42s)}
+@keyframes fl{0%{transform:translateX(0);opacity:0}8%{opacity:1}74%,100%{transform:translateX(196px);opacity:0}}
+.fl-retry{animation:flr 3.4s cubic-bezier(.5,0,.5,1) infinite;animation-delay:1.26s}
+@keyframes flr{0%{transform:translate(0,0);opacity:0}8%{opacity:1}30%{transform:translate(86px,0)}40%{transform:translate(86px,-15px)}54%{transform:translate(10px,-15px)}64%{transform:translate(10px,0)}94%,100%{transform:translate(196px,0);opacity:0}}
+.pulse{animation:pulse 2.1s ease-in-out infinite;animation-delay:calc(var(--i) * .16s);transform-origin:center;transform-box:fill-box}
+@keyframes pulse{0%,100%{transform:scaleY(.2)}50%{transform:scaleY(1)}}
+.jobq{animation:jobq 4s linear infinite;animation-delay:calc(var(--i) * .8s)}
+@keyframes jobq{0%{transform:translateX(0);opacity:0}6%{opacity:1}40%{transform:translateX(105px)}56%{transform:translateX(105px)}92%,100%{transform:translateX(187px);opacity:1}}
+.jobr{animation:jobr 4s linear infinite;animation-delay:2.4s}
+@keyframes jobr{0%{transform:translate(0,0);opacity:0}6%{opacity:1}34%{transform:translate(105px,0)}44%{transform:translate(105px,27px)}58%{transform:translate(28px,27px)}68%{transform:translate(28px,0)}88%{transform:translate(105px,0)}100%{transform:translate(187px,0);opacity:1}}
+.jobd{animation:jobd 4s linear infinite;animation-delay:3.1s}
+@keyframes jobd{0%{transform:translate(0,0);opacity:0}10%{opacity:1}44%{transform:translate(105px,0)}78%,100%{transform:translate(167px,46px);opacity:1}}
+.typing circle{animation:typ 1.3s ease-in-out infinite}
+.typing circle:nth-child(2){animation-delay:.18s}
+.typing circle:nth-child(3){animation-delay:.36s}
+@keyframes typ{0%,100%{opacity:.25}45%{opacity:1}}
+.msg{animation:msg 4.2s ease-in-out infinite}
+@keyframes msg{0%,10%{transform:translateX(0);opacity:0}16%{opacity:1}42%,100%{transform:translateX(104px);opacity:1}}
+.tick{stroke-dasharray:16;stroke-dashoffset:16;animation:tick 4.2s ease-in-out infinite}
+@keyframes tick{0%,52%{stroke-dashoffset:16;stroke:#5a6b66}70%,100%{stroke-dashoffset:0;stroke:#0d7d74}}
+.route{stroke-dasharray:150;stroke-dashoffset:150;animation:route 4.6s ease-in-out infinite}
+@keyframes route{0%,8%{stroke-dashoffset:150}62%,100%{stroke-dashoffset:0}}
+.pin{opacity:0;animation:pin 4.6s ease-in-out infinite;animation-delay:calc(var(--i) * .7s + .6s)}
+@keyframes pin{0%,6%{opacity:0;transform:translateY(-5px)}18%,100%{opacity:1;transform:translateY(0)}}
+.pref{opacity:0;animation:pref 4.6s ease-in-out infinite;animation-delay:calc(var(--i) * .26s)}
+@keyframes pref{0%{opacity:0;transform:translateX(-8px)}10%,46%{opacity:1;transform:translateX(0)}60%,100%{opacity:0;transform:translateX(10px)}}
+
+/* projects */
+.projects{display:grid;gap:clamp(42px,7vh,76px);max-width:var(--col)}
+.project{border-top:1px solid var(--line);padding-top:26px}
+.project h3{margin:0;font:600 clamp(1.4rem,3.2vw,2.15rem)/1.1 var(--display);font-variation-settings:"wdth" 100,"wght" 600;letter-spacing:-.005em}
+.project .pdesc{margin:12px 0 0;max-width:56ch;color:var(--paper)}
+
+/* stack */
+.stackgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;max-width:980px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(18,37,34,.04),0 22px 44px -30px rgba(18,37,34,.4)}
+.group{padding:20px 20px 24px;background:rgba(255,255,255,.84);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.group h3{margin:0 0 14px;font:500 .78rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--flow)}
+.group ul{margin:0;padding:0;list-style:none;display:grid;gap:7px;font-size:.98rem;color:var(--paper)}
+.group li{display:flex;align-items:baseline;gap:9px}
+.group li::before{content:"";flex:none;width:3px;height:3px;border-radius:50%;background:var(--muted)}
+
+/* contact */
+.cgrid{display:grid;gap:14px;max-width:var(--col);margin-top:8px}
+.cline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:16px 4px;border-bottom:1px solid var(--line)}
+.cline .k{flex:none;width:76px;font:400 .78rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cline .v{flex:1 1 220px;min-width:0;font:500 clamp(1.05rem,2.4vw,1.5rem)/1.3 var(--display);font-variation-settings:"wdth" 98,"wght" 480;word-break:break-word}
+.cline a.v{text-decoration:none;border-bottom:1px solid var(--line);transition:border-color .25s,color .25s}
+.cline a.v:hover{color:var(--flow);border-color:var(--flow)}
+.cp{flex:none;padding:7px 13px;border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--muted);font:400 .78rem/1 var(--mono);cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.cp:hover{color:#fff;background:var(--flow);border-color:var(--flow)}
+.cp.done{color:var(--flow);border-color:var(--flow)}
+
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:26px var(--gutter) 34px;border-top:1px solid var(--line);color:var(--muted);font:400 .84rem/1.6 var(--mono)}
+
+@media (max-width:620px){
+  .roles{padding-left:24px}
+  .role::before{left:-24px}
+  .stats{gap:20px 30px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="fallback" aria-hidden="true"></div>
+<div class="scrim" aria-hidden="true"></div>
+<div class="labels" id="labels" aria-hidden="true"></div>
+<div class="bar" id="bar" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#top">Labeeb Bilal</a>
+  <nav aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#systems">Systems</a>
+    <a href="#stack">Stack</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" data-cam="0">
+    <h1 id="h1"><span class="ln">Labeeb</span><span class="ln">Bilal</span></h1>
+    <p class="lead">Full stack developer in Srinagar. I build the half you don't see: upload pipelines, job queues, and the APIs that keep them honest.</p>
+    <ul class="stats">
+      <li><span class="num" data-to="2.5" data-dec="1">2.5</span><span class="cap">years shipping production backends</span></li>
+      <li><span class="num" data-to="20" data-suffix="+">20+</span><span class="cap">backend services on one platform</span></li>
+      <li><span class="num" data-to="40" data-suffix="%">40%</span><span class="cap">less time to prepare an itinerary</span></li>
+    </ul>
+    <p class="legend">
+      <span class="seq">client → s3 · api → queue → workers → store</span>
+      That's the scene behind this page, running live.
+      <span class="key"><i></i>jobs in flight</span>
+      <span class="key r"><i></i>retries and dead letters</span>
+    </p>
+  </section>
+
+  <section class="sec" id="work" data-cam="1">
+    <h2 class="vf">Two teams, two and a half years</h2>
+    <p class="sub">Both roles were full stack, both leaned backend. Here is what I actually shipped.</p>
+    <div class="roles" id="roles">
+
+      <article class="role">
+        <h3 class="co">Red Stag Labs</h3>
+        <p class="rmeta"><span>Full Stack Developer</span><span class="now">Dec 2025 — present</span></p>
+        <ul class="bullets">
+          <li>Built a <b>chunked video upload pipeline</b> on pre-signed Amazon S3 URLs. The client uploads straight to storage, the backend stays stateless, and a dropped connection resumes instead of starting over.</li>
+          <li>Built an <b>asynchronous transcript pipeline</b> with BullMQ: lecture audio becomes text, then OpenAI prompts turn that transcript into configurable quiz sets.</li>
+          <li>Designed <b>normalized MySQL schemas</b> for courses, quizzes, enrollment and assessment, so the same facts stopped living in three places.</li>
+        </ul>
+        <ul class="chips"><li>Node.js</li><li>BullMQ</li><li>MySQL</li><li>AWS S3</li><li>OpenAI API</li></ul>
+        <figure class="schema">
+          <svg viewBox="0 0 300 96" role="img" aria-label="A video splits into five chunks that upload directly to S3; a failed chunk is retried rather than restarting the upload.">
+            <rect class="sv-box" x="2" y="30" width="40" height="36" rx="3"/>
+            <text class="sv-txt" x="6" y="52">video</text>
+            <rect class="sv-box" x="256" y="22" width="42" height="52" rx="3"/>
+            <text class="sv-txt" x="262" y="52">S3</text>
+            <path d="M48 48h204" stroke="#a7b7b1" stroke-width="1" stroke-dasharray="3 5"/>
+            <g>
+              <rect class="fl" style="--i:0" x="50" y="42" width="11" height="11" rx="2" fill="#0d7d74"/>
+              <rect class="fl" style="--i:1" x="50" y="42" width="11" height="11" rx="2" fill="#0d7d74"/>
+              <rect class="fl-retry" x="50" y="42" width="11" height="11" rx="2" fill="#cf5422"/>
+              <rect class="fl" style="--i:3" x="50" y="42" width="11" height="11" rx="2" fill="#0d7d74"/>
+              <rect class="fl" style="--i:4" x="50" y="42" width="11" height="11" rx="2" fill="#0d7d74"/>
+            </g>
+            <text class="sv-txt" x="112" y="24" fill="#cf5422">retry this chunk only</text>
+          </svg>
+          <figcaption>Resumable upload: one failed chunk costs a chunk, not the file.</figcaption>
+        </figure>
+      </article>
+
+      <article class="role past">
+        <h3 class="co">Sherlock Travels</h3>
+        <p class="rmeta"><span>Full Stack Developer</span><span>Jun 2024 — Nov 2025</span></p>
+        <ul class="bullets">
+          <li>Built an <b>AI itinerary generator</b> on Next.js, TypeScript, Node, Express, MongoDB and the OpenAI API. Prompt orchestration reads user preferences and destination context, and replaced itineraries that were written by hand, cutting preparation time by 40%.</li>
+          <li>Grew the platform to <b>20+ production backend services</b> covering the booking lifecycle, destination management and customer reviews, on MongoDB models built for the queries they actually serve, with S3 holding media in one place.</li>
+          <li>Built the public travel platform in <b>Next.js with server-side rendering</b>, dynamic routing and secure authentication, so pages are indexable and bookings stay protected.</li>
+        </ul>
+        <ul class="chips"><li>Next.js</li><li>TypeScript</li><li>Express.js</li><li>MongoDB</li><li>AWS S3</li><li>SSR / SEO</li></ul>
+        <figure class="schema">
+          <svg viewBox="0 0 300 96" role="img" aria-label="User preferences feed a prompt that returns a routed, day-by-day itinerary.">
+            <g>
+              <rect class="sv-box pref" style="--i:0" x="2" y="14" width="56" height="15" rx="7"/>
+              <text class="sv-txt pref" style="--i:0" x="10" y="25">4 days</text>
+              <rect class="sv-box pref" style="--i:1" x="2" y="40" width="56" height="15" rx="7"/>
+              <text class="sv-txt pref" style="--i:1" x="10" y="51">budget</text>
+              <rect class="sv-box pref" style="--i:2" x="2" y="66" width="56" height="15" rx="7"/>
+              <text class="sv-txt pref" style="--i:2" x="10" y="77">trekking</text>
+            </g>
+            <rect class="sv-box" x="80" y="32" width="56" height="32" rx="3"/>
+            <text class="sv-txt" x="88" y="52">prompt</text>
+            <path d="M62 48h14M140 48h14" stroke="#a7b7b1" stroke-width="1"/>
+            <path class="route" d="M160 74C184 74 180 36 206 40s22 34 46 22" fill="none" stroke="#0d7d74" stroke-width="1.6" stroke-linecap="round"/>
+            <g fill="#cf5422">
+              <circle class="pin" style="--i:0" cx="160" cy="74" r="3.5"/>
+              <circle class="pin" style="--i:1" cx="206" cy="40" r="3.5"/>
+              <circle class="pin" style="--i:2" cx="252" cy="62" r="3.5"/>
+            </g>
+          </svg>
+          <figcaption>Preferences in, a day-by-day route out.</figcaption>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="sec" id="systems" data-cam="2">
+    <h2 class="vf">Built end to end</h2>
+    <p class="sub">Two systems I designed and wrote myself, from the schema up to the screen.</p>
+    <div class="projects">
+
+      <article class="project">
+        <h3>Online Learning Platform</h3>
+        <p class="pdesc">Course management, lesson delivery, enrollment, payments and the admin side of all three. The interesting parts are the ones that have to survive a bad day: payment webhooks are idempotent, enrollment is concurrency-safe, cron jobs clean up what gets abandoned, and email runs through BullMQ on Redis with retries, exponential backoff and a dead-letter queue. OpenAI sits behind a lesson-context injection so a student can ask a question about the lesson they are on.</p>
+        <ul class="chips"><li>React.js</li><li>Node.js</li><li>Express.js</li><li>MySQL</li><li>Redis</li><li>BullMQ</li><li>AWS S3</li><li>OpenAI API</li></ul>
+        <figure class="schema">
+          <svg viewBox="0 0 300 108" role="img" aria-label="Jobs leave a queue to a worker; most are delivered, one is retried with backoff, one falls to the dead-letter queue.">
+            <rect class="sv-box" x="2" y="26" width="34" height="34" rx="3"/>
+            <text class="sv-txt" x="6" y="47">queue</text>
+            <rect class="sv-box" x="130" y="26" width="38" height="34" rx="3"/>
+            <text class="sv-txt" x="135" y="47">worker</text>
+            <rect x="208" y="26" width="46" height="34" rx="3" fill="rgba(13,125,116,.10)" stroke="#0d7d74"/>
+            <text class="sv-txt" x="214" y="47" fill="#0d7d74">sent</text>
+            <rect x="188" y="76" width="46" height="26" rx="3" fill="rgba(207,84,34,.10)" stroke="#cf5422"/>
+            <text class="sv-txt" x="194" y="93" fill="#cf5422">DLQ</text>
+            <path d="M40 43h86M172 43h32M168 50l24 28" stroke="#a7b7b1" stroke-width="1" stroke-dasharray="3 5"/>
+            <path d="M126 70h-54" stroke="#cf5422" stroke-width="1" stroke-dasharray="3 4" opacity=".7"/>
+            <text class="sv-txt" x="74" y="66" fill="#cf5422">backoff</text>
+            <g>
+              <circle class="jobq" style="--i:0" cx="44" cy="43" r="4.5" fill="#0d7d74"/>
+              <circle class="jobq" style="--i:1" cx="44" cy="43" r="4.5" fill="#0d7d74"/>
+              <circle class="jobr" cx="44" cy="43" r="4.5" fill="#cf5422"/>
+              <circle class="jobd" cx="44" cy="43" r="4.5" fill="#cf5422"/>
+            </g>
+          </svg>
+          <figcaption>Every email job either lands, retries with backoff, or is kept in the dead-letter queue to look at.</figcaption>
+        </figure>
+      </article>
+
+      <article class="project">
+        <h3>Real-Time Communication Platform</h3>
+        <p class="pdesc">One-to-one messaging with secure authentication, online and offline presence, typing indicators, read receipts, and text, image and media messages. Twenty-plus APIs behind it on Node, Express and MongoDB, Socket.IO carrying the bidirectional traffic so the latency stays low, and Cloudinary handling media upload and storage.</p>
+        <ul class="chips"><li>React.js</li><li>Socket.IO</li><li>Node.js</li><li>Express.js</li><li>MongoDB</li><li>Cloudinary</li></ul>
+        <figure class="schema">
+          <svg viewBox="0 0 300 86" role="img" aria-label="A typing indicator becomes a message that crosses the socket and comes back read.">
+            <rect class="sv-box" x="2" y="16" width="56" height="54" rx="4"/>
+            <text class="sv-txt" x="9" y="40">client</text>
+            <text class="sv-txt" x="9" y="54">A</text>
+            <rect class="sv-box" x="242" y="16" width="56" height="54" rx="4"/>
+            <text class="sv-txt" x="249" y="40">client</text>
+            <text class="sv-txt" x="249" y="54">B</text>
+            <text class="sv-txt" x="124" y="14">socket.io</text>
+            <path d="M62 43h176" stroke="#a7b7b1" stroke-width="1"/>
+            <g class="typing" fill="#5a6b66">
+              <circle cx="76" cy="66" r="2.6"/><circle cx="85" cy="66" r="2.6"/><circle cx="94" cy="66" r="2.6"/>
+            </g>
+            <rect class="msg" x="74" y="34" width="52" height="18" rx="9" fill="#0d7d74" opacity=".9"/>
+            <path class="tick" d="M198 66l5 5 9-11M206 66l5 5 9-11" fill="none" stroke="#5a6b66" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <figcaption>Typing, delivered, read: three states on one socket.</figcaption>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="sec" id="stack" data-cam="3">
+    <h2 class="vf">What I work with</h2>
+    <p class="sub">Backend-first, comfortable across the stack, and currently deep in LLM integration work.</p>
+    <div class="stackgrid">
+      <div class="group">
+        <h3>Languages</h3>
+        <ul><li>Python</li><li>TypeScript</li><li>JavaScript (ES6+)</li><li>C</li></ul>
+      </div>
+      <div class="group">
+        <h3>Backend</h3>
+        <ul><li>Node.js</li><li>Express.js</li><li>Nest.js</li><li>REST APIs</li><li>Webhooks</li><li>Cron jobs</li><li>WebSockets (Socket.IO)</li></ul>
+      </div>
+      <div class="group">
+        <h3>Frontend</h3>
+        <ul><li>React.js</li><li>Next.js</li><li>HTML5 and CSS3</li><li>Tailwind CSS</li><li>Redux Toolkit</li><li>Bootstrap</li><li>Material-UI</li></ul>
+      </div>
+      <div class="group">
+        <h3>Databases</h3>
+        <ul><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>SQL</li></ul>
+      </div>
+      <div class="group">
+        <h3>AI</h3>
+        <ul><li>OpenAI APIs</li><li>LLM applications</li><li>LangChain</li><li>LangGraph</li><li>Model Context Protocol</li><li>Retrieval-augmented generation</li><li>Prompt engineering</li></ul>
+      </div>
+      <div class="group">
+        <h3>Tools and platforms</h3>
+        <ul><li>Git and GitHub</li><li>GitHub Actions (CI/CD)</li><li>Docker</li><li>Linux</li><li>Postman</li><li>BullMQ</li><li>AWS S3</li><li>Vercel, Railway, Render</li><li>Jira, Agile/Scrum</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact" data-cam="4">
+    <h2 class="vf">Get in touch</h2>
+    <p class="sub">The fastest way to reach me is email. I read everything.</p>
+    <div class="cgrid">
+      <div class="cline">
+        <span class="k">Email</span>
+        <a class="v" id="mail" href="mailto:labeebbilal0@gmail.com">labeebbilal0@gmail.com</a>
+        <button type="button" class="cp" data-copy="labeebbilal0@gmail.com">Copy</button>
+      </div>
+      <div class="cline">
+        <span class="k">Phone</span>
+        <a class="v" href="tel:+917006120738">+91 7006120738</a>
+        <button type="button" class="cp" data-copy="+917006120738">Copy</button>
+      </div>
+      <div class="cline">
+        <span class="k">LinkedIn</span>
+        <a class="v" href="https://linkedin.com/in/labeeb-bilal" target="_blank" rel="noopener">linkedin.com/in/labeeb-bilal</a>
+      </div>
+      <div class="cline">
+        <span class="k">Based in</span>
+        <span class="v">Srinagar, Jammu &amp; Kashmir</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Labeeb Bilal — Full Stack Developer</span>
+  <span>Pipeline rendered live with Three.js</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function(v, a, b){ return v < a ? a : (v > b ? b : v); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap = typeof window.gsap !== 'undefined';
+
+  /* ---------- split headline ---------- */
+  $$('#h1 .ln').forEach(function(ln){
+    var t = ln.textContent;
+    ln.textContent = '';
+    for(var i = 0; i < t.length; i++){
+      var s = document.createElement('span');
+      s.className = 'ch';
+      s.textContent = t[i];
+      ln.appendChild(s);
+    }
+  });
+
+  /* ---------- copy buttons ---------- */
+  $$('.cp').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var old = btn.textContent;
+      var reset = function(txt){
+        btn.textContent = txt;
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1800);
+      };
+      try{
+        navigator.clipboard.writeText(btn.dataset.copy).then(function(){ reset('Copied'); }, function(){ reset('Select it'); });
+      }catch(e){ reset('Select it'); }
+    });
+  });
+
+  /* ---------- scroll state ---------- */
+  var secs = $$('[data-cam]');
+  var navLinks = $$('.nav nav a');
+  var heads = $$('.vf');
+  var roles = $('#roles');
+  var bar = $('#bar');
+  var camIndex = 0;
+  var queued = false;
+
+  function onScroll(){
+    if(queued) return;
+    queued = true;
+    requestAnimationFrame(function(){
+      queued = false;
+      var vh = window.innerHeight, mid = vh * 0.5, i, r;
+      var activeId = '';
+      for(i = 0; i < secs.length; i++){
+        r = secs[i].getBoundingClientRect();
+        if(r.top <= mid && r.bottom > mid){
+          camIndex = parseInt(secs[i].dataset.cam, 10);
+          activeId = secs[i].id;
+          break;
+        }
+      }
+      navLinks.forEach(function(a){
+        a.classList.toggle('here', activeId !== '' && a.getAttribute('href') === '#' + activeId);
+      });
+      heads.forEach(function(h){
+        var b = h.getBoundingClientRect();
+        var p = clamp((vh * 0.94 - b.top) / (vh * 0.52), 0, 1);
+        h.style.setProperty('--wd', (70 + 48 * p).toFixed(1));
+        h.style.setProperty('--wt', (380 + 200 * p).toFixed(0));
+      });
+      if(roles){
+        var rb = roles.getBoundingClientRect();
+        var fill = clamp((vh * 0.72 - rb.top) / (rb.height * 0.78), 0, 1);
+        roles.style.setProperty('--fill', fill.toFixed(3));
+      }
+      var max = document.documentElement.scrollHeight - vh;
+      bar.style.transform = 'scaleX(' + (max > 0 ? clamp(window.scrollY / max, 0, 1) : 0).toFixed(4) + ')';
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- pointer ---------- */
+  var ndcX = 0, ndcY = 0;
+  window.addEventListener('pointermove', function(e){
+    ndcX = (e.clientX / window.innerWidth) * 2 - 1;
+    ndcY = -((e.clientY / window.innerHeight) * 2 - 1);
+  }, { passive: true });
+
+  /* ---------- graph definition ---------- */
+  var S = 0.60;
+  var NODES = [
+    { n: 'client', k: 'src',  p: [-7.6,  0.8,  0.6] },
+    { n: 's3',     k: '',     p: [-4.4,  2.7, -1.4] },
+    { n: 'api',    k: '',     p: [-4.2, -1.7,  1.2] },
+    { n: 'queue',  k: '',     p: [-1.0,  0.3,  0.0] },
+    { n: 'worker', k: '',     p: [ 2.4,  2.3, -1.5] },
+    { n: 'worker', k: '',     p: [ 2.6,  0.1,  0.9] },
+    { n: 'worker', k: '',     p: [ 2.3, -2.2, -0.5] },
+    { n: 'store',  k: 'sink', p: [ 6.4,  0.7,  0.2] },
+    { n: 'dlq',    k: 'dead', p: [ 3.6, -3.6,  1.6] }
+  ];
+  NODES.forEach(function(n){ n.p[0] *= S; n.p[1] *= S; n.p[2] *= S; });
+  var CLIENT = 0, QUEUE = 3, STORE = 7, DLQ = 8;
+  /* [from, to, weight, bow, retry] */
+  var EDGE_DEF = [
+    [0, 1, 0.5,  1.2, 0], [0, 2, 0.5, -1.0, 0],
+    [1, 3, 1.0,  0.7, 0], [2, 3, 1.0, -0.7, 0],
+    [3, 4, 0.34, 0.6, 0], [3, 5, 0.33, 0.2, 0], [3, 6, 0.33, -0.6, 0],
+    [4, 7, 0.80, 0.5, 0], [5, 7, 0.84, 0.2, 0], [6, 7, 0.80, -0.5, 0],
+    [4, 3, 0.16, 1.45, 1], [5, 3, 0.12, 1.25, 1], [6, 3, 0.16, -1.45, 1],
+    [4, 8, 0.04, -0.85, 1], [5, 8, 0.04, -0.7, 1], [6, 8, 0.04, 0.55, 1]
+  ];
+
+  var canvas = $('#gl');
+  var renderer = null, scene, camera, graph, pts, U, SEG = 48;
+  var bgScene = null, bgCam = null, bgU = null;
+  var edges = [], out = [];
+  var COUNT = window.innerWidth > 900 ? 520 : 230;
+  var pos, aSt, aSz, P_edge, P_t, P_sp, P_st, P_wait, P_jit;
+  var labelEls = [];
+  var wide = window.innerWidth >= 1000;
+
+  var CAMS = [
+    { p: [ 0.4,  1.4, 14.5], t: [ 0.0,  0.0,  0.0] },
+    { p: [-4.4,  1.1,  6.6], t: [-3.2,  0.5,  0.0] },
+    { p: [ 2.0,  0.5,  6.2], t: [ 1.5, -0.3,  0.0] },
+    { p: [ 0.1,  7.4,  9.2], t: [ 0.2,  0.0, -0.3] },
+    { p: [ 5.6,  0.9,  6.0], t: [ 5.4,  0.4,  0.0] }
+  ];
+  CAMS.forEach(function(c){ c.p[0] *= S; c.p[1] *= S; c.t[0] *= S; c.t[1] *= S; });
+
+  function buildEdges(){
+    var i, d, a, b, mid, curve, arr, p, j;
+    for(i = 0; i < NODES.length; i++) out.push([]);
+    for(i = 0; i < EDGE_DEF.length; i++){
+      d = EDGE_DEF[i];
+      a = new THREE.Vector3().fromArray(NODES[d[0]].p);
+      b = new THREE.Vector3().fromArray(NODES[d[1]].p);
+      mid = a.clone().add(b).multiplyScalar(0.5);
+      mid.y += d[3];
+      mid.z += d[3] * 0.35;
+      curve = new THREE.CatmullRomCurve3([a, mid, b]);
+      arr = new Float32Array(SEG * 3);
+      for(j = 0; j < SEG; j++){
+        p = curve.getPoint(j / (SEG - 1));
+        arr[j * 3] = p.x; arr[j * 3 + 1] = p.y; arr[j * 3 + 2] = p.z;
+      }
+      edges.push({ from: d[0], to: d[1], w: d[2], retry: d[4], pts: arr, curve: curve });
+      out[d[0]].push(i);
+    }
+  }
+
+  function pickEdge(node){
+    var list = out[node], total = 0, i;
+    if(!list || !list.length) return -1;
+    for(i = 0; i < list.length; i++) total += edges[list[i]].w;
+    var r = Math.random() * total;
+    for(i = 0; i < list.length; i++){
+      r -= edges[list[i]].w;
+      if(r <= 0) return list[i];
+    }
+    return list[list.length - 1];
+  }
+
+  function initGL(){
+    if(typeof THREE === 'undefined'){ document.documentElement.classList.add('no-gl'); return; }
+    try{
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
+    }catch(e){
+      renderer = null;
+      document.documentElement.classList.add('no-gl');
+      return;
+    }
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setClearColor(0x000000, 0);
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+    camera.position.set(CAMS[0].p[0], CAMS[0].p[1], CAMS[0].p[2]);
+    graph = new THREE.Group();
+    scene.add(graph);
+    renderer.autoClear = false;
+    buildBackdrop();
+
+    buildEdges();
+
+    /* edge lines */
+    var lineMat = new THREE.LineBasicMaterial({ color: 0x9fb0ab, transparent: true, opacity: 0.85 });
+    var retryMat = new THREE.LineBasicMaterial({ color: 0xe6bca6, transparent: true, opacity: 0.55 });
+    edges.forEach(function(e){
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(e.pts.slice(), 3));
+      graph.add(new THREE.Line(g, e.retry ? retryMat : lineMat));
+    });
+
+    /* node rings */
+    var ringMat = new THREE.LineBasicMaterial({ color: 0x55675f, transparent: true, opacity: 0.9 });
+    var sinkMat = new THREE.LineBasicMaterial({ color: 0x0d7d74, transparent: true, opacity: 0.95 });
+    var deadMat = new THREE.LineBasicMaterial({ color: 0xcf5422, transparent: true, opacity: 0.9 });
+    NODES.forEach(function(n){
+      var r = n.k === 'sink' ? 0.5 : (n.k === 'dead' ? 0.42 : 0.36);
+      var seg = 28, verts = [], a;
+      for(var i = 0; i <= seg; i++){
+        a = (i / seg) * Math.PI * 2 + Math.PI / 2;
+        verts.push(Math.cos(a) * r, Math.sin(a) * r, 0);
+      }
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+      var m = new THREE.Line(g, n.k === 'sink' ? sinkMat : (n.k === 'dead' ? deadMat : ringMat));
+      m.position.fromArray(n.p);
+      graph.add(m);
+    });
+
+    /* packets */
+    pos = new Float32Array(COUNT * 3);
+    aSt = new Float32Array(COUNT);
+    aSz = new Float32Array(COUNT);
+    P_edge = new Int16Array(COUNT);
+    P_t = new Float32Array(COUNT);
+    P_sp = new Float32Array(COUNT);
+    P_st = new Float32Array(COUNT);
+    P_wait = new Float32Array(COUNT);
+    P_jit = new Float32Array(COUNT * 3);
+    var healthy = [], failing = [];
+    for(var ei = 0; ei < edges.length; ei++) (edges[ei].retry ? failing : healthy).push(ei);
+    for(var i = 0; i < COUNT; i++){
+      P_edge[i] = (Math.random() < 0.07 && failing.length)
+        ? failing[(Math.random() * failing.length) | 0]
+        : healthy[(Math.random() * healthy.length) | 0];
+      P_t[i] = Math.random();
+      P_sp[i] = 0.26 + Math.random() * 0.26;
+      P_wait[i] = Math.random() < 0.12 ? Math.random() * 0.9 : 0;
+      P_st[i] = edges[P_edge[i]].retry ? 1 : 0;
+      aSz[i] = 2.2 + Math.random() * 1.5;
+      P_jit[i * 3] = (Math.random() - 0.5) * 0.52 * S;
+      P_jit[i * 3 + 1] = (Math.random() - 0.5) * 0.46 * S;
+      P_jit[i * 3 + 2] = (Math.random() - 0.5) * 0.46 * S;
+    }
+
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('aState', new THREE.BufferAttribute(aSt, 1));
+    geo.setAttribute('aSize', new THREE.BufferAttribute(aSz, 1));
+
+    U = {
+      uPx: { value: dpr },
+      uAlpha: { value: 1 },
+      uFlow: { value: new THREE.Color(0x0d7d74) },
+      uRetry: { value: new THREE.Color(0xcf5422) }
+    };
+
+    var mat = new THREE.ShaderMaterial({
+      uniforms: U,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      vertexShader: [
+        'attribute float aState;',
+        'attribute float aSize;',
+        'uniform float uPx;',
+        'varying float vState;',
+        'void main(){',
+        '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+        '  gl_Position = projectionMatrix * mv;',
+        '  vState = aState;',
+        '  gl_PointSize = aSize * uPx * (25.0 / max(0.4, -mv.z));',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform vec3 uFlow;',
+        'uniform vec3 uRetry;',
+        'uniform float uAlpha;',
+        'varying float vState;',
+        'void main(){',
+        '  float d = length(gl_PointCoord - 0.5);',
+        '  if(d > 0.5) discard;',
+        '  float core = 1.0 - smoothstep(0.30, 0.5, d);',
+        '  vec3 col = mix(uFlow, uRetry, clamp(vState, 0.0, 1.0));',
+        '  gl_FragColor = vec4(col, core * uAlpha);',
+        '}'
+      ].join('\n')
+    });
+
+    pts = new THREE.Points(geo, mat);
+    pts.frustumCulled = false;
+    graph.add(pts);
+
+    /* html labels */
+    var box = $('#labels');
+    NODES.forEach(function(n, i){
+      var el = document.createElement('span');
+      el.className = 'lab';
+      el.textContent = n.n;
+      if(n.k) el.setAttribute('data-kind', n.k);
+      box.appendChild(el);
+      labelEls.push(el);
+    });
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    if(hasGsap && !reduce){
+      U.uAlpha.value = 0;
+      gsap.to(U.uAlpha, { value: 1, duration: 2.6, ease: 'power2.out', delay: 0.25 });
+    }
+  }
+
+  function buildBackdrop(){
+    bgScene = new THREE.Scene();
+    bgCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    bgU = {
+      uTime: { value: 0 },
+      uRes: { value: new THREE.Vector2(1, 1) },
+      uBase: { value: new THREE.Color(0xf6f7f3) },
+      uMint: { value: new THREE.Color(0xd3e9df) },
+      uSky:  { value: new THREE.Color(0xd5e2f3) },
+      uSand: { value: new THREE.Color(0xf8e3cb) }
+    };
+    var mat = new THREE.ShaderMaterial({
+      uniforms: bgU,
+      depthTest: false,
+      depthWrite: false,
+      vertexShader: [
+        'varying vec2 vUv;',
+        'void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }'
+      ].join('\n'),
+      fragmentShader: [
+        'precision highp float;',
+        'uniform float uTime; uniform vec2 uRes;',
+        'uniform vec3 uBase; uniform vec3 uMint; uniform vec3 uSky; uniform vec3 uSand;',
+        'varying vec2 vUv;',
+        'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+        'float noise(vec2 p){',
+        '  vec2 i = floor(p), f = fract(p);',
+        '  vec2 u = f * f * (3.0 - 2.0 * f);',
+        '  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),',
+        '             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);',
+        '}',
+        'float fbm(vec2 p){',
+        '  float v = 0.0, a = 0.5;',
+        '  for(int i = 0; i < 4; i++){ v += a * noise(p); p *= 2.03; a *= 0.5; }',
+        '  return v;',
+        '}',
+        'void main(){',
+        '  vec2 uv = vUv;',
+        '  uv.x *= max(0.2, uRes.x / uRes.y);',
+        '  float t = uTime * 0.035;',
+        '  vec2 q = vec2(fbm(uv * 1.15 + t), fbm(uv * 1.15 + vec2(5.2, 1.3) - t * 0.8));',
+        '  vec2 r = vec2(fbm(uv * 1.3 + 2.0 * q + vec2(1.7, 9.2) + t * 0.6),',
+        '                fbm(uv * 1.3 + 2.0 * q + vec2(8.3, 2.8) - t * 0.5));',
+        '  float f = fbm(uv * 1.05 + 2.1 * r);',
+        '  vec3 col = mix(uBase, uMint, clamp(f * 1.75, 0.0, 1.0));',
+        '  col = mix(col, uSky, clamp(length(q) * 0.78, 0.0, 1.0));',
+        '  col = mix(col, uSand, clamp(r.x * r.x * 1.5, 0.0, 1.0));',
+        '  col = mix(col, uBase, clamp(0.34 - vUv.x * 0.4, 0.0, 1.0));',
+        '  col += (hash(gl_FragCoord.xy * 0.37) - 0.5) * 0.016;',
+        '  gl_FragColor = vec4(col, 1.0);',
+        '}'
+      ].join('\n')
+    });
+    bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+  }
+
+  function resize(){
+    if(!renderer) return;
+    var w = window.innerWidth, h = window.innerHeight;
+    wide = w >= 1000;
+    renderer.setSize(w, h, false);
+    if(bgU) bgU.uRes.value.set(w, h);
+    camera.aspect = w / h;
+    if(w >= 900){
+      camera.setViewOffset(w, h, -w * 0.24, 0, w, h);
+    }else{
+      camera.clearViewOffset();
+    }
+    camera.updateProjectionMatrix();
+    onScroll();
+  }
+
+  initGL();
+
+  /* ---------- intro + counters ---------- */
+  if(hasGsap && !reduce){
+    gsap.timeline({ defaults: { ease: 'expo.out' } })
+      .from('#h1 .ch', { yPercent: 115, duration: 1.25, stagger: 0.045 })
+      .fromTo('#h1 .ch', { '--wd': 62 }, { '--wd': 118, duration: 1.6, stagger: 0.035 }, 0.15)
+      .from('.lead', { y: 22, opacity: 0, duration: 1 }, '-=1.1')
+      .from('.stats li', { y: 18, opacity: 0, duration: .9, stagger: .08 }, '-=.85')
+      .from('.legend', { opacity: 0, duration: .9 }, '-=.6')
+      .from('.nav > *', { y: -16, opacity: 0, duration: .7, stagger: .07 }, '-=1.2');
+
+    $$('.num').forEach(function(el){
+      var to = parseFloat(el.dataset.to);
+      var dec = parseInt(el.dataset.dec || '0', 10);
+      var suf = el.dataset.suffix || '';
+      var o = { v: 0 };
+      gsap.to(o, {
+        v: to, duration: 1.9, ease: 'power2.out', delay: 0.5,
+        onUpdate: function(){ el.textContent = o.v.toFixed(dec) + suf; }
+      });
+    });
+  }
+
+  /* ---------- frame loop ---------- */
+  var camPos = null, look = null, scratch = null, cursor = null;
+  if(typeof THREE !== 'undefined'){
+    camPos = new THREE.Vector3(CAMS[0].p[0], CAMS[0].p[1], CAMS[0].p[2]);
+    look = new THREE.Vector3(0, 0, 0);
+    scratch = new THREE.Vector3();
+    cursor = new THREE.Vector3();
+  }
+  var mx = 0, my = 0, last = performance.now();
+
+  function step(now){
+    requestAnimationFrame(step);
+    if(!renderer || document.hidden){ last = now; return; }
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+
+    mx += (ndcX - mx) * (1 - Math.exp(-dt * 5));
+    my += (ndcY - my) * (1 - Math.exp(-dt * 5));
+
+    /* camera */
+    var c = CAMS[camIndex] || CAMS[0];
+    var k = 1 - Math.exp(-dt * 1.6);
+    camPos.x += (c.p[0] + mx * 1.1 - camPos.x) * k;
+    camPos.y += (c.p[1] + my * 0.8 - camPos.y) * k;
+    camPos.z += (c.p[2] - camPos.z) * k;
+    look.x += (c.t[0] - look.x) * k;
+    look.y += (c.t[1] - look.y) * k;
+    look.z += (c.t[2] - look.z) * k;
+    camera.position.copy(camPos);
+    camera.lookAt(look);
+
+    /* cursor in world space, on the z=0 plane */
+    cursor.set(ndcX, ndcY, 0.5).unproject(camera).sub(camera.position).normalize();
+    var dist = camera.position.z !== 0 ? -camera.position.z / cursor.z : 0;
+    cursor.multiplyScalar(dist).add(camera.position);
+
+    /* packets */
+    var i, e, t, f, i0, i1, fr, nx, px, py, pz, dx, dy, dd, push;
+    for(i = 0; i < COUNT; i++){
+      e = edges[P_edge[i]];
+      if(!e) continue;
+
+      if(P_wait[i] > 0 && !reduce){
+        P_wait[i] -= dt;
+        px = NODES[QUEUE].p[0] + P_jit[i * 3];
+        py = NODES[QUEUE].p[1] + P_jit[i * 3 + 1];
+        pz = NODES[QUEUE].p[2] + P_jit[i * 3 + 2];
+      }else{
+        if(!reduce){
+          P_t[i] += P_sp[i] * dt;
+          if(P_t[i] >= 1){
+            P_t[i] = 0;
+            nx = e.to;
+            if(nx === STORE || nx === DLQ){
+              P_edge[i] = pickEdge(CLIENT);
+              P_st[i] = 0;
+            }else{
+              var ne = pickEdge(nx);
+              P_edge[i] = ne >= 0 ? ne : pickEdge(CLIENT);
+              if(ne >= 0 && edges[ne].retry) P_st[i] = 1;
+              if(nx === QUEUE) P_wait[i] = 0.1 + Math.random() * 1.1;
+            }
+            e = edges[P_edge[i]];
+          }
+        }
+        t = P_t[i];
+        f = t * (SEG - 1);
+        i0 = f | 0;
+        i1 = i0 + 1 < SEG ? i0 + 1 : SEG - 1;
+        fr = f - i0;
+        px = e.pts[i0 * 3] + (e.pts[i1 * 3] - e.pts[i0 * 3]) * fr;
+        py = e.pts[i0 * 3 + 1] + (e.pts[i1 * 3 + 1] - e.pts[i0 * 3 + 1]) * fr;
+        pz = e.pts[i0 * 3 + 2] + (e.pts[i1 * 3 + 2] - e.pts[i0 * 3 + 2]) * fr;
+      }
+
+      if(!reduce && P_st[i] > 0 && !e.retry) P_st[i] *= 0.992;
+
+      dx = px - cursor.x;
+      dy = py - cursor.y;
+      dd = Math.sqrt(dx * dx + dy * dy);
+      if(dd < 2.2){
+        push = (1 - dd / 2.2) * 0.9;
+        px += (dx / (dd + 0.001)) * push;
+        py += (dy / (dd + 0.001)) * push;
+      }
+
+      pos[i * 3] = px;
+      pos[i * 3 + 1] = py;
+      pos[i * 3 + 2] = pz;
+      aSt[i] = P_st[i];
+    }
+    pts.geometry.attributes.position.needsUpdate = true;
+    pts.geometry.attributes.aState.needsUpdate = true;
+
+    graph.rotation.y = mx * 0.06;
+    graph.rotation.x = -my * 0.03;
+
+    if(bgU && !reduce) bgU.uTime.value += dt;
+    renderer.clear();
+    renderer.render(bgScene, bgCam);
+    renderer.clearDepth();
+    renderer.render(scene, camera);
+
+    /* labels */
+    if(labelEls.length){
+      if(!wide){
+        for(i = 0; i < labelEls.length; i++) labelEls[i].style.transform = 'translate3d(-9999px,-9999px,0)';
+      }else{
+        graph.updateMatrixWorld(true);
+        var w = window.innerWidth, h = window.innerHeight;
+        for(i = 0; i < NODES.length; i++){
+          scratch.fromArray(NODES[i].p).applyMatrix4(graph.matrixWorld).project(camera);
+          var sx = (scratch.x * 0.5 + 0.5) * w;
+          var sy = (-scratch.y * 0.5 + 0.5) * h;
+          if(scratch.z > 1 || sx < w * 0.47 || sx > w - 16 || sy < 70 || sy > h - 30){
+            labelEls[i].style.transform = 'translate3d(-9999px,-9999px,0)';
+          }else if(sx > w - 118){
+            labelEls[i].classList.add('flip');
+            labelEls[i].style.transform = 'translate3d(' + (sx - 13).toFixed(1) + 'px,' + (sy - 7).toFixed(1) + 'px,0) translateX(-100%)';
+          }else{
+            labelEls[i].classList.remove('flip');
+            labelEls[i].style.transform = 'translate3d(' + (sx + 13).toFixed(1) + 'px,' + (sy - 7).toFixed(1) + 'px,0)';
+          }
+        }
+      }
+    }
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
